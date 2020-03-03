@@ -1,0 +1,46 @@
+DROP TABLE PRICE_ADMIN.CUSTOMER_ITEM_PRICE IF EXISTS;    
+drop sequence CUSTOMER_ITEM_PRICE_SEQ IF EXISTS;
+
+CREATE TABLE PRICE_ADMIN.CUSTOMER_ITEM_PRICE
+(
+CUSTOMER_ITEM_PRICE_SEQ         			NUMERIC     NOT NULL,   
+GFS_CUSTOMER_ID                         	VARCHAR2(9),   
+GFS_CUSTOMER_TYPE_CODE                  	NUMBER,        
+ITEM_PRICE_LEVEL_CODE                   	NUMBER,       
+ITEM_PRICE_ID                           	VARCHAR2(50), 
+EFFECTIVE_DATE                          	DATE,          
+EXPIRATION_DATE                         	DATE,          
+CREATE_TMSTMP                           	TIMESTAMP(6) WITH TIME ZONE DEFAULT SYSTIMESTAMP NOT NULL,
+CREATE_USER_ID                          	VARCHAR2(100), 
+LAST_UPDATE_TMSTMP                      	TIMESTAMP(6) WITH TIME ZONE DEFAULT SYSTIMESTAMP NOT NULL,       
+LAST_UPDATE_USER_ID                     VARCHAR2(100), 
+PRICE_LOCKED_IN_TYPE_CODE               NUMERIC,        
+PRICE_ADJUSTMENT_AMT                    NUMERIC,        
+PRICE_ADJUSTMENT_AMT_TYPE_CODE          VARCHAR2(3),   
+HOLD_COST_FIRM_IND                      NUMERIC,     
+HOLD_COST_FIRM_EFFECTIVE_DATE           DATE,          
+HOLD_COST_FIRM_EXPIRATION_DATE          DATE,          
+IGNORE_ALLOWANCE_IND                    NUMERIC  DEFAULT 0  NOT NULL,  
+MAX_BASE_PRICE_VALUE                    VARCHAR2(50),  
+MAX_BASE_PRICE_TYPE_CODE                NUMERIC,       
+PRICE_BRACKET_ID                        NUMERIC,        
+COST_MARKUP_AMT                         NUMERIC(128,2),       
+MARKUP_AMOUNT_TYPE_CODE                 VARCHAR2(3),   
+MARKUP_UNIT_TYPE_CODE                   NUMERIC,        
+LOCKED_IN_AMT                           NUMERIC,        
+PRICE_LOCKIN_REASON_CODE        			NUMERIC     NOT NULL,   
+PRICE_CUSTOMER_BID_SEQ                  NUMERIC,        
+PRICE_TIER_ID                           NUMERIC,        
+PRICE_MAINTENANCE_SOURCE_CODE           NUMERIC,        
+ORIGINAL_EXPIRATION_DATE                DATE,          
+NATIONALLY_PRICED_IND           NUMERIC  DEFAULT 0  NOT NULL,     
+CONTRACT_PRICE_PROFILE_SEQ              NUMERIC,  
+
+  
+  CONSTRAINT CUSTOMER_ITEM_PRICE_PK PRIMARY KEY (CUSTOMER_ITEM_PRICE_SEQ)
+  
+);
+
+create sequence CUSTOMER_ITEM_PRICE_SEQ as integer start with 1000;
+
+CREATE SYNONYM PUBLIC.CUSTOMER_ITEM_PRICE FOR PRICE_ADMIN.CUSTOMER_ITEM_PRICE;

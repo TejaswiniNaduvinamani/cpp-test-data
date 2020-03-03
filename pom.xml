@@ -1,0 +1,149 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>gfs-archive-parent</artifactId>
+        <groupId>com.gfs.maven</groupId>
+        <version>2.0.0</version>
+        <relativePath />
+    </parent>
+
+    <groupId>com.gfs.price.customer</groupId>
+    <artifactId>cpp-test-database</artifactId>
+    <version>0.1.6-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>Customer Pricing Profile Application - Test Database</name>
+    <description>This project contains an hsqldb to be used for data integration testing. Include this module as a 
+	    dependency and reference it with the jdbc url "jdbc:hsqldb:res:/cppDatabase;shutdown=true"
+	</description>
+
+    <properties>
+        <gfs.jdk.source.version>1.7</gfs.jdk.source.version>
+        <gfs.jdk.target.version>1.7</gfs.jdk.target.version>
+        <dbunit.version>2.4.9</dbunit.version>
+        <hsqldb.version>2.3.4</hsqldb.version>
+    </properties>
+
+    <scm>
+        <connection>scm:git:${gfs.git.prefix.ssh}/pm/cpp-test-database.git</connection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+            <version>${dbunit.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>commons-collections</artifactId>
+                    <groupId>commons-collections</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>${hsqldb.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <version>1.5</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.hsqldb</groupId>
+                        <artifactId>hsqldb</artifactId>
+                        <version>${hsqldb.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <driver>org.hsqldb.jdbcDriver</driver>
+                    <url>jdbc:hsqldb:file:${project.build.outputDirectory}/cppDatabase;shutdown=true</url>
+                    <username>sa</username>
+                    <password />
+                </configuration>
+                <executions>
+
+                    <execution>
+                        <id>init-cpp_test-db</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <orderFile>ascending</orderFile>
+                            <srcFiles>
+                                <srcFile>${project.build.scriptSourceDirectory}/init.sql</srcFile>
+                            </srcFiles>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>create-cpp_test-db</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <orderFile>ascending</orderFile>
+                            <fileset>
+                                <basedir>${project.build.scriptSourceDirectory}</basedir>
+                                <excludes>
+                                    <exclude>**/init.sql</exclude>
+                                </excludes>
+                            </fileset>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven 
+                    build itself. -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+                                            org.codehaus.mojo
+                                        </groupId>
+                                        <artifactId>
+                                            sql-maven-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [1.5,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>execute</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
